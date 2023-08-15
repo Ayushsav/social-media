@@ -1,0 +1,32 @@
+.post-card {
+    border: 1px solid #ddd;
+    margin: 20px;
+    padding: 15px;
+    background-color: #fff;
+    border-radius: 5px;
+}
+
+.post-image {
+    max-width: 100%;
+    border-radius: 5px;
+}
+
+.post-content {
+    margin-top: 10px;
+}
+.sidebar {
+    background-color: #f8f9fa;
+    height: 100vh;
+    color: black;
+}
+
+.profile-pic {
+    width: 60px;
+    height: 60px;
+    border-radius: 50%;
+    object-fit: cover;
+}
+
+a {
+    color: black;
+}
