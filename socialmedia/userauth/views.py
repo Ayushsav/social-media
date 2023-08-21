@@ -15,6 +15,9 @@ def signup(request):
         print(fnm,emailid,pwd)
         my_user=User.objects.create_user(fnm,emailid,pwd)
         my_user.save()
+        user_model = User.objects.get(username=fnm)
+        new_profile = Profile.objects.create(user=user_model, id_user=user_model.id)
+        new_profile.save()
         return redirect('/loginn')
     
     return render(request, 'signup.html')
@@ -48,7 +51,13 @@ def logoutt(request):
 @login_required(login_url='/loginn')
 def home(request):
     post=Post.objects.all().order_by('-created_at')
-    return render(request, 'main.html',{'post':post})
+    profile=Profile.objects.filter(user=request.user)
+    context={
+        'post':post,
+        'profile':profile
+        
+    }
+    return render(request, 'main.html',context)
     
 
 
@@ -93,8 +102,45 @@ def explore(request):
     post=Post.objects.all().order_by('-created_at')
     return render(request, 'explore.html',{'post':post})
 
-def profile(request):
-    profile=Profile.objects.all()
-    # post=Post.objects.all().order_by('-created_at')
-    post= Post.objects.filter(user=request.user).order_by('-created_at')
-    return render(request, 'profile.html',{'post':post ,'profile':profile})
+def profile(request,id_user):
+    user_object = User.objects.get(username=id_user)
+    user_profile = Profile.objects.get(user=user_object)
+    user_posts = Post.objects.filter(user=id_user).order_by('-created_at')
+    user_post_length = len(user_posts)
+
+    follower = request.user.username
+    user = id_user
+
+    context = {
+        'user_object': user_object,
+        'user_profile': user_profile,
+        'user_posts': user_posts,
+        'user_post_length': user_post_length,
+    }
+    if request.user.username == id_user:
+        if request.method == 'POST':
+            if request.FILES.get('image') == None:
+             image = user_profile.profileimg
+             bio = request.POST['bio']
+             location = request.POST['location']
+
+             user_profile.profileimg = image
+             user_profile.bio = bio
+             user_profile.location = location
+             user_profile.save()
+            if request.FILES.get('image') != None:
+             image = request.FILES.get('image')
+             bio = request.POST['bio']
+             location = request.POST['location']
+
+             user_profile.profileimg = image
+             user_profile.bio = bio
+             user_profile.location = location
+             user_profile.save()
+            
+
+            return redirect('/profile/'+id_user)
+        else:
+            return render(request, 'profile.html', {'user_profile': user_profile})
+    return render(request, 'profile.html', context)
+

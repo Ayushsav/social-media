@@ -4,7 +4,7 @@
     <div class="row">
         <nav class="col-md-2 d-none d-md-block sidebar" style="position: fixed;">
             <div class="text-center mt-3">
-                <img src="https://jooinn.com/images/face-23.jpg" alt="Profile Picture" class="profile-pic">
+                <img src="{{profile.profileimg.url}}" alt="Profile Picture" class="profile-pic">
                 <h4 class="mt-2">@{{user}}</h4>
             </div>
             <ul class="nav flex-column mt-4">
@@ -37,7 +37,7 @@
 
                 </li>
                 <li class="nav-item">
-                    <a class="nav-link" href="/profile">
+                    <a class="nav-link" href="/profile/{{user}}">
                         <i class="fa-solid fa-user mr-1"></i> Profile
                     </a>
                 </li>

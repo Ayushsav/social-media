@@ -1,5 +1,5 @@
 {% load static %}
-<div class="modal fade" id="exampleModal" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
+<div class="modal fade" id="exampleModal1" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
@@ -8,25 +8,29 @@
             </div>
             <div class="modal-body">
 
-                <form action="upload" method="POST" enctype="multipart/form-data">
+                <form method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="mb-3">
                         <img src="{% static 'css/upload.png' %}" alt="" class="m-1">
                         
                         <label for="recipient-name" class="col-form-label">Photo</label>
-                        <input type="file" name="image_upload" class="form-control" id="recipient-name">
+                        <input type="file" name="image" class="form-control" id="recipient-name">
 
                     </div>
                     <div class="mb-3">
-                        <label for="message-text" class="col-form-label">Caption</label>
-                        <textarea class="form-control" name="caption" placeholder="Caption..."
-                            id="message-text"></textarea>
+                        <label for="message-text" class="col-form-label">Bio</label>
+                        <textarea class="form-control" name="bio" placeholder="Bio..."
+                            id="message-text">{{user_profile.bio}}</textarea>
+                    </div>
+                    <div class="mb-3">
+                        <label for="recipient-name" class="col-form-label">Location</label>
+                        <input type="text" class="form-control" name="location" id="recipient-name" value="{{user_profile.location}}">
                     </div>
 
             </div>
             <div class="modal-footer">
                 <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Close</button>
-                <button type="submit" class="btn btn-primary">Create Post</button>
+                <button type="submit" class="btn btn-primary">Update Profile</button>
             </div>
             </form>
         </div>
