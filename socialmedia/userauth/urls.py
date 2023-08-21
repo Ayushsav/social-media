@@ -10,4 +10,7 @@ urlpatterns = [
     path('signup/',views.signup),
     path('logoutt/',views.logoutt),
     path('upload',views.upload),
+    path('like-post', views.likes, name='like-post'),
+    path('explore',views.explore),
+    path('profile',views.profile),
 ]

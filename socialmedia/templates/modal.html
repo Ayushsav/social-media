@@ -12,6 +12,7 @@
                     {% csrf_token %}
                     <div class="mb-3">
                         <img src="{% static 'css/upload.png' %}" alt="" class="m-1">
+                        <img id="imagePreview" src="#" alt="Image Preview">
                         <label for="recipient-name" class="col-form-label">Photo</label>
                         <input type="file" name="image_upload" class="form-control" id="recipient-name">
 

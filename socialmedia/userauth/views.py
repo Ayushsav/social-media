@@ -3,7 +3,7 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from . models import Post
+from . models import LikePost, Post, Profile
 
 
 
@@ -66,3 +66,35 @@ def upload(request):
         return redirect('/')
     else:
         return redirect('/')
+
+
+def likes(request):
+    username = request.user.username
+    post_id = request.GET.get('post_id')
+
+    post = Post.objects.get(id=post_id)
+
+    like_filter = LikePost.objects.filter(post_id=post_id, username=username).first()
+
+    if like_filter == None:
+        new_like = LikePost.objects.create(post_id=post_id, username=username)
+        new_like.save()
+        post.no_of_likes = post.no_of_likes+1
+        post.save()
+        
+    else:
+        like_filter.delete()
+        post.no_of_likes = post.no_of_likes-1
+        post.save()
+        return redirect('/')
+    
+
+def explore(request):
+    post=Post.objects.all().order_by('-created_at')
+    return render(request, 'explore.html',{'post':post})
+
+def profile(request):
+    profile=Profile.objects.all()
+    # post=Post.objects.all().order_by('-created_at')
+    post= Post.objects.filter(user=request.user).order_by('-created_at')
+    return render(request, 'profile.html',{'post':post ,'profile':profile})

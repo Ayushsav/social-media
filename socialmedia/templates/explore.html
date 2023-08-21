@@ -1,0 +1,187 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <link rel="stylesheet" href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+    <script src="https://kit.fontawesome.com/cb792c0850.js" crossorigin="anonymous"></script>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/css/bootstrap.min.css" rel="stylesheet"
+        integrity="sha384-EVSTQN3/azprG1Anm3QDgpJLIm9Nao0Yz1ztcQTwFspd3yD65VohhpuuCOmLASjC" crossorigin="anonymous">
+
+    <title>Social Media</title>
+    <link rel="stylesheet" href="{% static 'css/app.css' %}">
+    <style>
+        /* Custom styles for the sidebar */
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+
+        .sidebar {
+            background-color: #f8f9fa;
+            height: 100vh;
+            color: black;
+        }
+
+        .profile-pic {
+            width: 60px;
+            height: 60px;
+            border-radius: 50%;
+            object-fit: cover;
+        }
+
+        a {
+            color: black;
+        }
+
+        .image_s {
+            position: relative;
+            width: 213px;
+        }
+
+        .image__img {
+            display: block;
+            width: 100%;
+        }
+
+        .image__overlay {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+
+            color: #000000;
+            font-family: 'Quicksand', sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            opacity: 0;
+            transition: opacity 0.25s;
+        }
+
+
+
+
+
+        .image__overlay>* {
+            transform: translateY(20px);
+            transition: transform 0.25s;
+        }
+
+        .image__overlay:hover {
+            opacity: 1;
+        }
+
+        .image__overlay:hover>* {
+            transform: translateY(0);
+        }
+
+        .image_s:hover .image__img  {
+            opacity: 0.1;
+        
+        }
+
+        .image__title {
+            font-size: 2em;
+            font-weight: bold;
+        }
+
+        .image__description {
+            font-size: 1.25em;
+            margin-top: 0.25em;
+        }
+    </style>
+</head>
+
+<body>
+
+    {% load static %}
+
+    <div class="container-fluid">
+        <div class="row">
+            <nav class="col-md-2 d-none d-md-block sidebar" style="position: fixed;">
+                <div class="text-center mt-3">
+                    <img src="https://jooinn.com/images/face-23.jpg" alt="Profile Picture" class="profile-pic">
+                    <h4 class="mt-2">@{{user}}</h4>
+                </div>
+                <ul class="nav flex-column mt-4">
+                    <li class="nav-item">
+                        <a class="nav-link active" href="/">
+                            <i class="fa-solid fa-house mr-1"></i> Home
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/explore">
+                            <i class="fa-solid fa-compass mr-1"></i> Explore
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fa-solid fa-magnifying-glass mr-1"></i> Search
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#">
+                            <i class="fa-solid fa-bell mr-1"></i> Notifications
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal"
+                            data-bs-whatever="@getbootstrap">
+                            <i class="fa-solid fa-circle-plus mr-1"></i> Create Post
+                        </a>
+
+
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/profile">
+                            <i class="fa-solid fa-user mr-1"></i> Profile
+                        </a>
+                    </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="/logoutt">
+                            <i class="fa-solid fa-right-from-bracket mr-1"></i> Logout
+                        </a>
+                    </li>
+                </ul>
+            </nav>
+
+            <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
+
+                {% include "modal.html" %}
+
+
+                <div class="container text-center" style="padding: 10px; margin-top:20px;">
+                    <div class="row row-cols-3">
+                        {% for pos in post %}
+                        <div class="col m-2 image_s" style="margin-bottom:10px;">
+                            <img class="image__img" src="{{pos.image.url}}" alt="Post Image"
+                                style="max-width: 213px; max-height:213px">
+                            <div class="image__overlay image__overlay--primary">
+                                <div class="image__title"><a href="#">@{{pos.user}}</a></div>
+                                <p class="image__description">
+                                    {{pos.caption}}
+                                </p>
+                            </div>
+                        </div>
+                        {% endfor %}
+
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="{% static 'js/app.js'%}"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.0.2/dist/js/bootstrap.bundle.min.js"
+        integrity="sha384-MrcW6ZMFYlzcLA8Nl+NtUVF0sA7MsXsP1UyJoMp4YLEuNSfAP+JcXn/tWtIaxVXM"
+        crossorigin="anonymous"></script>
+</body>
+
+</html>
