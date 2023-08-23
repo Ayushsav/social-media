@@ -36,8 +36,10 @@ def loginn(request):
         print(fnm,pwd)
         userr=authenticate(request,username=fnm,password=pwd)
         if userr is not None:
+            
             login(request,userr)
             return redirect('/')
+        
         else:
             return redirect('/loginn')
                
@@ -51,10 +53,14 @@ def logoutt(request):
 @login_required(login_url='/loginn')
 def home(request):
     post=Post.objects.all().order_by('-created_at')
-    profile=Profile.objects.filter(user=request.user)
+    
+    profile = Profile.objects.get(user=request.user)
+    
+
     context={
         'post':post,
-        'profile':profile
+        'profile':profile,
+        
         
     }
     return render(request, 'main.html',context)
@@ -100,10 +106,20 @@ def likes(request):
 
 def explore(request):
     post=Post.objects.all().order_by('-created_at')
-    return render(request, 'explore.html',{'post':post})
+    profile = Profile.objects.get(user=request.user)
+
+    context={
+        'post':post,
+        'profile':profile
+        
+    }
+    return render(request, 'explore.html',context)
+    
 
 def profile(request,id_user):
     user_object = User.objects.get(username=id_user)
+    print(user_object)
+    profile = Profile.objects.get(user=request.user)
     user_profile = Profile.objects.get(user=user_object)
     user_posts = Post.objects.filter(user=id_user).order_by('-created_at')
     user_post_length = len(user_posts)
@@ -116,7 +132,10 @@ def profile(request,id_user):
         'user_profile': user_profile,
         'user_posts': user_posts,
         'user_post_length': user_post_length,
+        'profile': profile,
     }
+    
+    
     if request.user.username == id_user:
         if request.method == 'POST':
             if request.FILES.get('image') == None:
@@ -141,6 +160,7 @@ def profile(request,id_user):
 
             return redirect('/profile/'+id_user)
         else:
-            return render(request, 'profile.html', {'user_profile': user_profile})
+            return render(request, 'profile.html', context)
     return render(request, 'profile.html', context)
+
 

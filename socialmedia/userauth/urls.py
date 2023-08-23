@@ -14,4 +14,10 @@ urlpatterns = [
     path('explore',views.explore),
     path('profile/<str:id_user>', views.profile),
     
+   
+    
+    
+    
+    
+    
 ]

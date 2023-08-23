@@ -3,12 +3,12 @@
     <div class="modal-dialog">
         <div class="modal-content">
             <div class="modal-header">
-                <h1 class="modal-title fs-5" id="exampleModalLabel">New Post</h1>
+                <h1 class="modal-title fs-5" id="exampleModalLabel">Edit Profile</h1>
                 <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
             </div>
             <div class="modal-body">
 
-                <form method="POST" enctype="multipart/form-data">
+                <form  method="POST" enctype="multipart/form-data">
                     {% csrf_token %}
                     <div class="mb-3">
                         <img src="{% static 'css/upload.png' %}" alt="" class="m-1">
