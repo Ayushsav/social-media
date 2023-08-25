@@ -142,11 +142,11 @@
                                                 <p class="small text-muted mb-0">Photos</p>
                                             </div>
                                             <div class="px-3">
-                                                <p class="mb-1 h5">1026</p>
+                                                <p class="mb-1 h5">0</p>
                                                 <p class="small text-muted mb-0">Followers</p>
                                             </div>
                                             <div>
-                                                <p class="mb-1 h5">478</p>
+                                                <p class="mb-1 h5">0</p>
                                                 <p class="small text-muted mb-0">Following</p>
                                             </div>
                                         </div>
@@ -171,7 +171,10 @@
                                                 <img src="{{pos.image.url}}" class="card-img-top" alt="...">
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{pos.caption}}</h5>
-                                                    
+                                                {% if user == user_profile.user %} <a href=" /delete/{{pos.id}} "><i class="fa-solid fa-trash"></i></a>
+
+                                                      
+                                                    {% endif %}
                                                 </div>
                                             </div>
                                             

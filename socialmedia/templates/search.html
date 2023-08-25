@@ -1,19 +1,30 @@
-<!-- Button trigger modal -->
+<!-- !-- Button trigger modal -->
 {% load static %}
 
 <!-- Modal -->
 <div class="modal fade" id="exampleModal3" tabindex="-1" aria-labelledby="exampleModalLabel" aria-hidden="true">
     <div class="modal-dialog">
         <div class="modal-content">
-            <div class="modal-header">
-
+            <div class="modal-header d-flex align-content-center justify-content-center">
+<div class="w-100" >
+                <form method="get" action="{% url 'search_results' %}">
+                    {% csrf_token %}
+                    
+                        <div class="input-group rounded">
+                            <input type="text" name="q" placeholder="Search users and posts" class="form-control rounded"
+                                aria-label="Search" aria-describedby="search-addon" />
+                            <span class="input-group-text border-0" id="search-addon">
+                                <i class="fas fa-search" type="submit"></i>
+                            </span>
+                        </div>
+                    </div>
                 
-            </div>
-            <div class="modal-body">
                 
+                </form>
 
             </div>
+            
 
         </div>
     </div>
-</div>
+</div> -->

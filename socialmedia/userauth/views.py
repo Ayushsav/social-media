@@ -1,4 +1,5 @@
-from  django . shortcuts  import  render, redirect
+from itertools import chain
+from  django . shortcuts  import  get_object_or_404, render, redirect
 from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
@@ -83,24 +84,26 @@ def upload(request):
         return redirect('/')
 
 
-def likes(request):
-    username = request.user.username
-    post_id = request.GET.get('post_id')
+def likes(request, id):
+    if request.method == 'GET':
+        username = request.user.username
+        post = get_object_or_404(Post, id=id)
 
-    post = Post.objects.get(id=post_id)
+        like_filter = LikePost.objects.filter(post_id=id, username=username).first()
 
-    like_filter = LikePost.objects.filter(post_id=post_id, username=username).first()
+        if like_filter is None:
+            new_like = LikePost.objects.create(post_id=id, username=username)
+            post.no_of_likes = post.no_of_likes + 1
+        else:
+            like_filter.delete()
+            post.no_of_likes = post.no_of_likes - 1
 
-    if like_filter == None:
-        new_like = LikePost.objects.create(post_id=post_id, username=username)
-        new_like.save()
-        post.no_of_likes = post.no_of_likes+1
         post.save()
+
+        # Generate the URL for the current post's detail page
         
-    else:
-        like_filter.delete()
-        post.no_of_likes = post.no_of_likes-1
-        post.save()
+
+        # Redirect back to the post's detail page
         return redirect('/')
     
 
@@ -163,4 +166,25 @@ def profile(request,id_user):
             return render(request, 'profile.html', context)
     return render(request, 'profile.html', context)
 
+
+def delete(request, id):
+    post = Post.objects.get(id=id)
+    post.delete()
+
+    return redirect('/profile/'+ request.user.username)
+
+# make a individual post function is going to show in home page
+
+def search_results(request):
+    query = request.GET.get('q')
+
+    users = Profile.objects.filter(user__username__icontains=query)
+    posts = Post.objects.filter(caption__icontains=query)
+
+    context = {
+        'query': query,
+        'users': users,
+        'posts': posts,
+    }
+    return render(request, 'search_user.html', context)
 
