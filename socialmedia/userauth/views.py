@@ -8,7 +8,9 @@ from . models import LikePost, Post, Profile
 
 
 
+
 def signup(request):
+ try:
     if request.method == 'POST':
         fnm=request.POST.get('fnm')
         emailid=request.POST.get('emailid')
@@ -19,9 +21,18 @@ def signup(request):
         user_model = User.objects.get(username=fnm)
         new_profile = Profile.objects.create(user=user_model, id_user=user_model.id)
         new_profile.save()
+        if my_user is not None:
+            login(request,my_user)
+            return redirect('/')
         return redirect('/loginn')
     
-    return render(request, 'signup.html')
+        
+ except:
+        invalid="User already exists"
+        return render(request, 'signup.html',{'invalid':invalid})
+  
+    
+ return render(request, 'signup.html')
         
      
         
@@ -31,25 +42,28 @@ def signup(request):
     
 
 def loginn(request):
-    if request.method == 'POST':
+ 
+  if request.method == 'POST':
         fnm=request.POST.get('fnm')
         pwd=request.POST.get('pwd')
         print(fnm,pwd)
         userr=authenticate(request,username=fnm,password=pwd)
         if userr is not None:
-            
             login(request,userr)
             return redirect('/')
         
-        else:
-            return redirect('/loginn')
+ 
+        invalid="Invalid Credentials"
+        return render(request, 'loginn.html',{'invalid':invalid})
                
-    return render(request, 'loginn.html')
+  return render(request, 'loginn.html')
 
 @login_required(login_url='/loginn')
 def logoutt(request):
     logout(request)
     return redirect('/loginn')
+
+
 
 @login_required(login_url='/loginn')
 def home(request):
@@ -68,7 +82,7 @@ def home(request):
     
 
 
-
+@login_required(login_url='/loginn')
 def upload(request):
 
     if request.method == 'POST':
@@ -83,7 +97,7 @@ def upload(request):
     else:
         return redirect('/')
 
-
+@login_required(login_url='/loginn')
 def likes(request, id):
     if request.method == 'GET':
         username = request.user.username
@@ -106,7 +120,7 @@ def likes(request, id):
         # Redirect back to the post's detail page
         return redirect('/')
     
-
+@login_required(login_url='/loginn')
 def explore(request):
     post=Post.objects.all().order_by('-created_at')
     profile = Profile.objects.get(user=request.user)
@@ -118,7 +132,7 @@ def explore(request):
     }
     return render(request, 'explore.html',context)
     
-
+@login_required(login_url='/loginn')
 def profile(request,id_user):
     user_object = User.objects.get(username=id_user)
     print(user_object)
@@ -166,15 +180,15 @@ def profile(request,id_user):
             return render(request, 'profile.html', context)
     return render(request, 'profile.html', context)
 
-
+@login_required(login_url='/loginn')
 def delete(request, id):
     post = Post.objects.get(id=id)
     post.delete()
 
     return redirect('/profile/'+ request.user.username)
 
-# make a individual post function is going to show in home page
 
+@login_required(login_url='/loginn')
 def search_results(request):
     query = request.GET.get('q')
 
