@@ -73,7 +73,7 @@
                         </a>
                     </li>
                     <li class="nav-item">
-                        <a class="nav-link" href="#">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal3">
                             <i class="fa-solid fa-magnifying-glass mr-1"></i> Search
                         </a>
                     </li>
@@ -104,6 +104,7 @@
             {% load static %}
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <!-- Your main content goes here -->
+                {% include "search.html" %}
             {% include "profile_upload.html" %}
             {% include "edit_profile.html" %}
                 <section class="gradient-custom-2">

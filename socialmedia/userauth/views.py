@@ -115,10 +115,10 @@ def likes(request, id):
         post.save()
 
         # Generate the URL for the current post's detail page
-        
+        print(post.id)
 
         # Redirect back to the post's detail page
-        return redirect('/')
+        return redirect('/#'+id)
     
 @login_required(login_url='/loginn')
 def explore(request):
@@ -201,4 +201,13 @@ def search_results(request):
         'posts': posts,
     }
     return render(request, 'search_user.html', context)
+
+def home_post(request,id):
+    post=Post.objects.get(id=id)
+    profile = Profile.objects.get(user=request.user)
+    context={
+        'post':post,
+        'profile':profile
+    }
+    return render(request, 'main.html',context)
 
