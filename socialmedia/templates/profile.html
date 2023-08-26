@@ -33,33 +33,37 @@
         }
 
         .image-grid {
-    display: grid;
-    grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
-    gap: 10px;
-}
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 10px;
+        }
 
-.image-item {
-    border: 1px solid #ccc;
-    padding: 10px;
-}
+        .image-item {
+            border: 1px solid #ccc;
+            padding: 10px;
+        }
+        .image-item:hover {
+            border: 1px solid #777;
+            
+        }
 
-.image-item img {
-    max-width: 100%;
-    height: auto;
-}
-
+        .image-item img {
+            max-width: 100%;
+            height: auto;
+        }
+        
     </style>
 </head>
 
 <body>
     {% load static %}
-    
+
     <div class="container-fluid">
         <div class="row">
             <nav class="col-md-2 d-none d-md-block sidebar" style="position: fixed;">
                 <div class="text-center mt-3">
                     <img src="{{profile.profileimg.url}}" alt="Profile Picture" class="profile-pic">
-                    <h4 class="mt-2">@{{user}}</h4>
+                    <h4 class="mt-2"><a href="/profile/{{user}}" style="text-decoration:none;">@{{user}}</a></h4>
                 </div>
                 <ul class="nav flex-column mt-4">
                     <li class="nav-item">
@@ -82,13 +86,14 @@
                             <i class="fa-solid fa-bell mr-1"></i> Notifications
                         </a>
                     </li>
-                <li class="nav-item">
-                    <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal2" data-bs-whatever="@getbootstrap">
-                        <i class="fa-solid fa-circle-plus mr-1"></i> Create Post
-                    </a>
-                
-                
-                </li>
+                    <li class="nav-item">
+                        <a class="nav-link" href="#" data-bs-toggle="modal" data-bs-target="#exampleModal2"
+                            data-bs-whatever="@getbootstrap">
+                            <i class="fa-solid fa-circle-plus mr-1"></i> Create Post
+                        </a>
+
+
+                    </li>
                     <li class="nav-item">
                         <a class="nav-link" href="/profile/{{user}}">
                             <i class="fa-solid fa-user mr-1"></i> Profile
@@ -105,34 +110,36 @@
             <main role="main" class="col-md-9 ml-sm-auto col-lg-10 px-md-4">
                 <!-- Your main content goes here -->
                 {% include "search.html" %}
-            {% include "profile_upload.html" %}
-            {% include "edit_profile.html" %}
+                {% include "profile_upload.html" %}
+                {% include "edit_profile.html" %}
                 <section class="gradient-custom-2">
                     <div class="container py-5">
                         <div class="row d-flex justify-content-center align-items-center h-100">
                             <div class="col col-lg-9 col-xl-7">
                                 <div class="card">
-                                    <div class="rounded-top text-white d-flex flex-row" style="background-color: #000; height:200px;">
-                                        <div class="ms-4 mt-5 d-flex flex-column" style="width: 150px;">
-                                            <img src="{{user_profile.profileimg.url}}"
-                                                alt="Generic placeholder image" class="img-fluid img-thumbnail mt-4 mb-2"
+                                    <div class="rounded-top text-white d-flex flex-row"
+                                        style="background:black; height:200px;">
+                                        <div class="ms-4  d-flex flex-column" style="width: 150px; margin-top:5rem;">
+                                            <img src="{{user_profile.profileimg.url}}" alt="Generic placeholder image"
+                                                class="img-fluid img-thumbnail mt-4 mb-2"
                                                 style="width: 150px; z-index: 1">
-                                              
-                                                {% if user == user_profile.user  %}
-                                                <button type="button" class="btn btn-outline-dark" data-mdb-ripple-color="dark" style="z-index: 1;"
-                                                    data-bs-toggle="modal" data-bs-target="#exampleModal1" data-bs-whatever="@getbootstrap">
-                                                    Edit profile
-                                                </button>
-                                                  
-                                                {% endif %}
-                                                
-                                                
-                                            
-                                            
+
+                                            {% if user == user_profile.user %}
+                                            <button type="button" class="btn btn-outline-dark"
+                                                data-mdb-ripple-color="dark" style="z-index: 1; margin: 5px;" data-bs-toggle="modal"
+                                                data-bs-target="#exampleModal1" data-bs-whatever="@getbootstrap">
+                                                Edit profile
+                                            </button>
+
+                                            {% endif %}
+
+
+
+
                                         </div>
                                         <div class="ms-3" style="margin-top: 130px;">
                                             <h5>@{{user_profile.user}}</h5>
-                                            
+
                                             <p><i class="fa-solid fa-location-dot"></i> {{user_profile.location}}</p>
                                         </div>
                                     </div>
@@ -158,43 +165,45 @@
                                             <div class="p-4" style="background-color: #f8f9fa;">
                                                 <p class="font-italic mb-1">{{user_profile.bio}}</p>
                                             </div>
-                                            
+
                                         </div>
                                         <div class="mb-5">
                                             <p class="lead fw-normal mb-1">Photos</p>
-                                          
-                                          
-                                        
+
+
+
                                         </div>
                                         <div class="image-grid">
                                             {% for pos in user_posts %}
                                             <div class="card image-item">
-                                                <img src="{{pos.image.url}}" class="card-img-top" alt="...">
+                                                <img src="{{pos.image.url}}" class="card-img-top" alt="..." style="width: 219px;height: 219px;">
+                                            
                                                 <div class="card-body">
                                                     <h5 class="card-title">{{pos.caption}}</h5>
-                                                {% if user == user_profile.user %} <a href=" /delete/{{pos.id}} "><i class="fa-solid fa-trash"></i></a>
+                                                    {% if user == user_profile.user %} <a href=" /delete/{{pos.id}} "><i
+                                                            class="fa-solid fa-trash"></i></a>
 
-                                                      
+
                                                     {% endif %}
                                                 </div>
                                             </div>
-                                            
-                                            
+
+
                                             {% endfor %}
                                         </div>
-                                        
 
-                                        
+
+
                                     </div>
                                 </div>
                             </div>
                         </div>
                     </div>
                 </section>
-            
-            
+
+
             </main>
-    
+
         </div>
     </div>
 
