@@ -4,7 +4,8 @@ from django.http import HttpResponse
 from django.contrib.auth.models import User
 from django.contrib.auth import authenticate, login, logout
 from django.contrib.auth.decorators import login_required
-from . models import LikePost, Post, Profile
+from . models import  Followers, LikePost, Post, Profile
+from django.db.models import Q
 
 
 
@@ -67,16 +68,17 @@ def logoutt(request):
 
 @login_required(login_url='/loginn')
 def home(request):
-    post=Post.objects.all().order_by('-created_at')
     
-    profile = Profile.objects.get(user=request.user)
-    
+    following_users = Followers.objects.filter(follower=request.user.username).values_list('user', flat=True)
 
-    context={
-        'post':post,
-        'profile':profile,
-        
-        
+    
+    post = Post.objects.filter(Q(user=request.user.username) | Q(user__in=following_users)).order_by('-created_at')
+
+    profile = Profile.objects.get(user=request.user)
+
+    context = {
+        'post': post,
+        'profile': profile,
     }
     return render(request, 'main.html',context)
     
@@ -143,6 +145,14 @@ def profile(request,id_user):
 
     follower = request.user.username
     user = id_user
+    
+    if Followers.objects.filter(follower=follower, user=user).first():
+        follow_unfollow = 'Unfollow'
+    else:
+        follow_unfollow = 'Follow'
+
+    user_followers = len(Followers.objects.filter(user=id_user))
+    user_following = len(Followers.objects.filter(follower=id_user))
 
     context = {
         'user_object': user_object,
@@ -150,6 +160,9 @@ def profile(request,id_user):
         'user_posts': user_posts,
         'user_post_length': user_post_length,
         'profile': profile,
+        'follow_unfollow':follow_unfollow,
+        'user_followers': user_followers,
+        'user_following': user_following,
     }
     
     
@@ -211,3 +224,20 @@ def home_post(request,id):
     }
     return render(request, 'main.html',context)
 
+
+
+def follow(request):
+    if request.method == 'POST':
+        follower = request.POST['follower']
+        user = request.POST['user']
+
+        if Followers.objects.filter(follower=follower, user=user).first():
+            delete_follower = Followers.objects.get(follower=follower, user=user)
+            delete_follower.delete()
+            return redirect('/profile/'+user)
+        else:
+            new_follower = Followers.objects.create(follower=follower, user=user)
+            new_follower.save()
+            return redirect('/profile/'+user)
+    else:
+        return redirect('/')
